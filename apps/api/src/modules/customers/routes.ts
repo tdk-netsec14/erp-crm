@@ -9,12 +9,12 @@ import * as controller from "./controller.js";
 const router = Router();
 router.use(authenticate);
 
-router.get("/", authorize(Role.ADMIN, Role.SALES, Role.WAREHOUSE, Role.ACCOUNTS), controller.list);
+router.get("/", authorize(Role.ADMIN, Role.SALES, Role.ACCOUNTS), controller.list);
 router.post("/", authorize(Role.ADMIN, Role.SALES), validate(createCustomerSchema), controller.create);
-router.get("/:id", authorize(Role.ADMIN, Role.SALES, Role.WAREHOUSE, Role.ACCOUNTS), controller.getOne);
+router.get("/:id", authorize(Role.ADMIN, Role.SALES, Role.ACCOUNTS), controller.getOne);
 router.put("/:id", authorize(Role.ADMIN, Role.SALES), validate(updateCustomerSchema), controller.update);
 router.delete("/:id", authorize(Role.ADMIN, Role.SALES), controller.remove);
-router.get("/:id/follow-ups", authorize(Role.ADMIN, Role.SALES, Role.ACCOUNTS), controller.getFollowUps);
+router.get("/:id/follow-ups", authorize(Role.ADMIN, Role.SALES), controller.getFollowUps);
 router.post("/:id/follow-ups", authorize(Role.ADMIN, Role.SALES), validate(addFollowUpSchema), controller.createFollowUp);
 
 export default router;

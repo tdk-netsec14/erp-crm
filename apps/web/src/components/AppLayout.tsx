@@ -13,10 +13,10 @@ import {
 import clsx from "clsx";
 
 const navItems = [
-  { to: "/", icon: LayoutDashboard, label: "Dashboard", end: true },
-  { to: "/customers", icon: Users, label: "Customers" },
-  { to: "/products", icon: Package, label: "Products" },
-  { to: "/challans", icon: FileText, label: "Challans" },
+  { to: "/", icon: LayoutDashboard, label: "Dashboard", end: true, roles: ["ADMIN", "SALES", "WAREHOUSE", "ACCOUNTS"] },
+  { to: "/customers", icon: Users, label: "Customers", roles: ["ADMIN", "SALES"] },
+  { to: "/products", icon: Package, label: "Products", roles: ["ADMIN", "WAREHOUSE"] },
+  { to: "/challans", icon: FileText, label: "Challans", roles: ["ADMIN", "SALES", "ACCOUNTS"] },
 ];
 
 export default function AppLayout() {
@@ -47,7 +47,9 @@ export default function AppLayout() {
 
         {/* Navigation */}
         <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
-          {navItems.map(({ to, icon: Icon, label, end }) => (
+          {navItems
+            .filter((item) => user?.role && item.roles.includes(user.role))
+            .map(({ to, icon: Icon, label, end }) => (
             <NavLink
               key={to}
               to={to}

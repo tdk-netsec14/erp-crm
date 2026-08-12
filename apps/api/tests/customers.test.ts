@@ -67,11 +67,13 @@ describe("Customers CRUD", () => {
     expect(res.status).toBe(403);
   });
 
-  it("All roles can list customers", async () => {
-    for (const token of [adminToken, salesToken, warehouseToken, accountsToken]) {
+  it("Allowed roles can list customers", async () => {
+    for (const token of [adminToken, salesToken, accountsToken]) {
       const res = await request(app).get("/v1/customers").set("Authorization", `Bearer ${token}`);
       expect(res.status).toBe(200);
     }
+    const res2 = await request(app).get("/v1/customers").set("Authorization", `Bearer ${warehouseToken}`);
+    expect(res2.status).toBe(403);
   });
 
   it("Can search customers by name", async () => {
@@ -121,12 +123,18 @@ describe("Customer Follow-ups", () => {
     expect(res.status).toBe(403);
   });
 
-  it("Accounts can list follow-ups", async () => {
+  it("Sales can list follow-ups, Accounts cannot", async () => {
     const res = await request(app)
       .get(`/v1/customers/${testCustomerId}/follow-ups`)
-      .set("Authorization", `Bearer ${accountsToken}`);
+      .set("Authorization", `Bearer ${salesToken}`);
 
     expect(res.status).toBe(200);
     expect(Array.isArray(res.body.data)).toBe(true);
+    
+    const res2 = await request(app)
+      .get(`/v1/customers/${testCustomerId}/follow-ups`)
+      .set("Authorization", `Bearer ${accountsToken}`);
+      
+    expect(res2.status).toBe(403);
   });
 });

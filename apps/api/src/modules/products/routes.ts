@@ -14,7 +14,7 @@ router.post("/", authorize(Role.ADMIN, Role.WAREHOUSE), validate(createProductSc
 router.get("/:id", authorize(Role.ADMIN, Role.SALES, Role.WAREHOUSE, Role.ACCOUNTS), controller.getOne);
 router.put("/:id", authorize(Role.ADMIN, Role.WAREHOUSE), validate(updateProductSchema), controller.update);
 router.delete("/:id", authorize(Role.ADMIN), controller.remove);
-router.get("/:id/stock-movements", authorize(Role.ADMIN, Role.SALES, Role.WAREHOUSE, Role.ACCOUNTS), controller.getStockMovements);
+router.get("/:id/stock-movements", authorize(Role.ADMIN, Role.WAREHOUSE), controller.getStockMovements);
 router.post("/:id/stock-movements", authorize(Role.ADMIN, Role.WAREHOUSE), validate(createStockMovementSchema), controller.addStockMovement);
 
 export default router;
